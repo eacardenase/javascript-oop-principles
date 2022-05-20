@@ -422,3 +422,94 @@
 
 // console.log(myObject);
 // console.log(anotherObject);
+
+// delete keyword only works on own properties
+
+// /////////////////
+
+// function Person(name) {
+//     this.name = name;
+// }
+
+// Person.prototype.sayMyName = function () {
+//     console.log(this.name);
+// };
+
+// const person1 = new Person('Edwin');
+// const person2 = new Person('Keyla');
+
+// person1.sayMyName();
+// person2.sayMyName();
+
+// //////////////
+
+// function Person(name) {
+//     this.name = name;
+// }
+
+// Person.prototype = {
+//     constructor: Person,
+//     sayMyName() {
+//         console.log(this.name);
+//     },
+//     toString() {
+//         return `[Person ${this.name}]`;
+//     },
+// };
+
+// const person1 = new Person('Edwin');
+// const person2 = new Person('Ana Maria');
+
+// person1.sayMyName();
+// person2.sayMyName();
+// console.log(person1.toString());
+// console.log(person2.toString());
+
+// console.log(person1.constructor);
+
+// ////////////////
+
+// function Person(name) {
+//     this.name = name;
+// }
+
+// Person.prototype = {
+//     constructor: Person,
+//     sayMyName() {
+//         console.log(this.name);
+//     },
+//     toString() {
+//         return `[Person ${this.name}]`;
+//     },
+// };
+
+// const person1 = new Person('Edwin');
+// const person2 = new Person('Ana Maria');
+
+// console.log(person1 instanceof Person);
+// console.log(Person.prototype.isPrototypeOf(person1));
+
+// console.log('sayHi' in person1);
+// console.log('sayHi' in person2);
+
+// Person.prototype.sayHi = function () {
+//     console.log(`Hi, my name is ${this.name}`);
+// };
+
+// console.log('sayHi' in person1);
+// console.log('sayHi' in person2);
+
+// person1.sayHi();
+// person2.sayHi();
+
+// /////////////// Built-in Object Prototypes
+
+// Array.prototype.sum = function () {
+//     return this.reduce((prev, curr) => {
+//         return prev + curr;
+//     }, 0);
+// };
+
+// const numbers = [1, 2, 3, 3];
+// const result = numbers.sum();
+// console.log(result);
