@@ -664,40 +664,209 @@
 
 // //////////////////
 
-function Rectangle (length, width) {
-    this.length = length;
-    this.width = width
-}
+// function Rectangle (length, width) {
+//     this.length = length;
+//     this.width = width
+// }
 
-Rectangle.prototype.getArea = function () {
-    return this.length * this.width
-}
+// Rectangle.prototype.getArea = function () {
+//     return this.length * this.width
+// }
 
-Rectangle.prototype.toString = function () {
-    return `[Rectangle ${this.length}x${this.width}]`;
-}
+// Rectangle.prototype.toString = function () {
+//     return `[Rectangle ${this.length}x${this.width}]`;
+// }
 
-function Square (size) {
-    Rectangle.call(this, size, size)
-}
+// function Square (size) {
+//     Rectangle.call(this, size, size)
+// }
 
-Square.prototype = Object.create(Rectangle.prototype, {
-    constructor: {
-        configurable: true,
-        enumerable: true,
-        value: Square,
-        writable: true
+// Square.prototype = Object.create(Rectangle.prototype, {
+//     constructor: {
+//         configurable: true,
+//         enumerable: true,
+//         value: Square,
+//         writable: true
+//     }
+// })
+
+// // call the supertype method
+// Square.prototype.toString = function() {
+//     const text = Rectangle.prototype.toString.call(this);
+//     return text.replace("Rectangle", "Square");
+// };
+
+// const square = new Square(6);
+// console.log(square);
+// console.log(square.getArea());
+// console.log(square.toString());
+
+/**
+ * ############# Chapter 6: Object Patterns
+ */
+
+// module pattern
+
+// const person = (function(){
+//     let age = 26;
+
+//     return {
+//         name: "Edwin",
+//         getAge: function () {
+//             return age;
+//         },
+//         growOlder: function() {
+//             age++
+//         }
+//     }
+// }())
+
+// console.log(person.name);
+// console.log(person.getAge());
+
+// person.age = 100;
+// console.log(person.getAge()); // 26
+
+// person.growOlder();
+// console.log(person.getAge());
+
+// revealing module pattern
+
+// const person = (function(){
+//     let age = 26;
+
+//     function getAge() {
+//         return age;
+//     }
+
+//     function growOlder() {
+//         age++;
+//     }
+
+//     return {
+//         name: "Edwin",
+//         getAge,
+//         growOlder
+//     }
+// }())
+
+// console.log(person.name);
+// console.log(person.getAge());
+// person.growOlder();
+// console.log(person.getAge());
+
+// ///////////
+
+// function Person(name) {
+//     let age = 26;
+//     this.name = name;
+//     this.getAge = function() {
+//         return age;
+//     };
+//     this.growOlder = function( ){
+//         age++
+//     };
+// }
+
+// const me = new Person("Edwin");
+// console.log(me.name);
+// console.log(me.getAge());
+// me.growOlder();
+// console.log(me.getAge());
+
+// /////////////////
+
+// const Person = (function(){
+//     // everyone shares the same age
+//     let age = 26;
+
+//     function InnerPerson(name) {
+//         this.name = name;
+//     }
+
+//     InnerPerson.prototype.getAge = function() {
+//         return age;
+//     }
+
+//     InnerPerson.prototype.growOlder = function() {
+//         age++
+//     }
+
+//     return InnerPerson;
+// }())
+
+// const person1 = new Person("Edwin");
+// const person2 = new Person("Brayam");
+
+// console.log(person1.name);
+// console.log(person1.getAge());
+
+// console.log(person2.name);
+// console.log(person1.getAge());
+
+
+// person1.growOlder();
+
+// console.log(person1.getAge());
+// console.log(person2.getAge());
+
+// ////////////
+
+// function mixin(receiver, supplier) {
+//     for (let property in supplier) {
+//         if (supplier.hasOwnProperty(property)) {
+//             receiver[property] = supplier[property]
+//         }
+//     }
+
+//     return receiver
+// }
+
+// function mixin(receiver, supplier) {
+//     for (let property in supplier) {
+//         if (!receiver.hasOwnProperty(property)) {
+//             receiver[property] = supplier[property]
+//         }
+//     }
+
+//     return receiver
+// }
+
+// function mixin(receiver, supplier) {
+//     Object.keys(supplier).forEach(function(property) {
+//         const descriptor = Object.getOwnPropertyDescriptor(supplier, property);
+//         Object.defineProperty(receiver, property, descriptor);
+//     });
+
+//     return receiver
+// }
+
+// const object1 = {
+//     prop1: 1,
+//     prop2: 2
+// }
+
+// const object2 = {
+//     prop2: 3
+// }
+
+// console.log(object2);
+
+// mixin(object2, object1)
+
+// console.log(object1);
+// console.log(object2);
+
+// Scope-Safe Constructors
+
+function Person(name) {
+    if (this instanceof Person) {
+        this.name = name
+    } else {
+        return new Person(name)
     }
-})
+}
 
-// call the supertype method
-Square.prototype.toString = function() {
-    const text = Rectangle.prototype.toString.call(this);
-    return text.replace("Rectangle", "Square");
-};
-
-const square = new Square(6);
-console.log(square);
-console.log(square.getArea());
-console.log(square.toString());
-
+const me = Person("Edwin");
+console.log(me);
+console.log(me instanceof Person); // true
