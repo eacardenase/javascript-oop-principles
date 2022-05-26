@@ -513,3 +513,191 @@
 // const numbers = [1, 2, 3, 3];
 // const result = numbers.sum();
 // console.log(result);
+
+/**
+ * ############# Chapter 5: Inheritance
+ */
+
+// const book = {
+//     title: 'The Principles of Object-Oriented JavaScript.',
+//     toString: function () {
+//         return `[Book ${this.title}]`;
+//     },
+// };
+
+// const message = 'Book = ' + book;
+
+// console.log(message);
+
+// /////////////
+
+// changing Object.prototype (DON'T!!!)
+
+// Object.prototype.add = function (value) {
+//     return this + value;
+// };
+
+// const book = {
+//     title: 'The Principles of Object-Oriented JavaScript',
+// };
+
+// console.log(book.add(5)); // [object Object]5
+// console.log('title'.add('end')); // titleend
+
+// const emptyObj = {};
+
+// for (let property in emptyObj) {
+//     console.log(property);
+// }
+
+// /////////////
+
+// const emptyObj = {};
+
+// for (let property in emptyObj) {
+//     if (emptyObj.hasOwnProperty(property)) {
+//         console.log(property);
+//     }
+// }
+
+// /////////////
+
+// const book = {
+//     title: 'The Principles of Object-Oriented JavaScript',
+// };
+
+// const book = Object.create(Object.prototype, {
+//     title: {
+//         configurable: true,
+//         enumerable: true,
+//         value: 'The Principles of Object-Oriented JavaScript',
+//         writable: true,
+//     },
+// });
+
+// ///////////////
+
+// const person1 = {
+//     name: 'Edwin',
+//     sayMyName: function () {
+//         console.log(this.name);
+//     },
+// };
+
+// const person2 = Object.create(person1, {
+//     name: {
+//         configurable: true,
+//         enumerable: true,
+//         value: 'Ana Maria',
+//         writable: true,
+//     },
+// });
+
+// person1.sayMyName();
+// person2.sayMyName();
+
+// console.log(person1.hasOwnProperty('sayMyName')); // true
+// console.log(person1.isPrototypeOf(person2)); // true
+// console.log(person2.hasOwnProperty('sayMyName')); // false
+
+// ////////////
+
+// const nakedObj = Object.create(null);
+
+// console.log('toString' in nakedObj); // false
+// console.log('valueOf' in nakedObj); // false
+
+// ///////////
+
+// function Rectangle(length, width) {
+//     this.length = length;
+//     this.width = width;
+//     this.test = 'Test';
+// }
+
+// Rectangle.prototype.getArea = function () {
+//     return this.length * this.width;
+// };
+
+// Rectangle.prototype.toString = function () {
+//     return `[Rectangle ${this.length}x${this.width}]`;
+// };
+
+// // inherits from Rectangle
+// function Square(size) {
+//     // Rectangle.call(this, size, size);
+//     Rectangle.apply(this, [size, size]);
+// }
+
+// // Square.prototype = Object.create(Rectangle.prototype);
+
+// Square.prototype = Object.create(Rectangle.prototype, {
+//     constructor: {
+//         configurable: true,
+//         enumerable: true,
+//         value: Square,
+//         writable: true,
+//     },
+// });
+
+// // Square.prototype.constructor = Square;
+// Square.prototype.toString = function () {
+//     return `[Square ${this.length}x${this.width}]`;
+// };
+
+// const rect = new Rectangle(5, 10);
+// const square = new Square(6);
+
+// console.log(rect.getArea());
+// console.log(rect.toString());
+// // console.log(square);
+// console.log(square.constructor); // [Function: Square]
+// console.log(square.getArea());
+// console.log(square.toString());
+
+// console.log(rect instanceof Rectangle); // true
+// console.log(rect instanceof Object); // true
+
+// console.log(square instanceof Square); // true
+// console.log(square instanceof Rectangle); // true
+// console.log(square instanceof Object); // true
+
+// //////////////////
+
+function Rectangle (length, width) {
+    this.length = length;
+    this.width = width
+}
+
+Rectangle.prototype.getArea = function () {
+    return this.length * this.width
+}
+
+Rectangle.prototype.toString = function () {
+    return `[Rectangle ${this.length}x${this.width}]`;
+}
+
+function Square (size) {
+    Rectangle.call(this, size, size)
+}
+
+Square.prototype = Object.create(Rectangle.prototype, {
+    constructor: {
+        configurable: true,
+        enumerable: true,
+        value: Square,
+        writable: true
+    }
+})
+
+// call the supertype method
+Square.prototype.toString = function() {
+    const text = Rectangle.prototype.toString.call(this);
+    return text.replace("Rectangle", "Square");
+};
+
+const square = new Square(6);
+console.log(square);
+console.log(square.getArea());
+console.log(square.toString());
+
